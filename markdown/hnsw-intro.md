@@ -92,11 +92,7 @@ VII. Practical Applications of HNSW
 A. Case study: How Qdrant uses HNSW for similarity search
 B. Other potential uses in images, text and recommendation systems
 
-IX. Conclusion
-A. Recap of the importance of HNSW in managing high-dimensional data
-B. Future implications and areas for further research
-
-X. References and Further Reading
+References and Further Reading
 A. Link to original HNSW paper
 B. Relevant tutorials or examples
 C. Suggestions for other sources on related topics
