@@ -78,11 +78,6 @@ Furthermore, HNSW can be optimized for vectorization, which involves performing 
 
 Additionally, HNSW provides multiple avenues for parallelization to handle larger datasets and higher query volumes. It can be parallelized using distributed computing or multi-threading, dividing the workload across multiple machines or threads, respectively. Also, it can be accelerated using Graphics Processing Units (GPUs), which are designed for parallel computing, thereby significantly improving the algorithm's performance.
 
-V. Parallelization in HNSW
-A. Explanation of the concept of parallelization
-B. How HNSW can be run on multiple processors or nodes
-C. Importance of parallelization in large-scale applications
-
 VI. Limitations and Considerations
 A. Memory requirements and construction times
 B. Accuracy considerations due to approximation
