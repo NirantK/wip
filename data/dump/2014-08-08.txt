@@ -1,2 +1,0 @@
-From Whale Songs to the Beatles: Computer Analysis of Musical Styles under the category: SCIENCE
- Vocal communication of whales sounds like songs whales sing to each other. So if our algorithm was able to analyze songs made by whales, we started to wonder how well it could analyze songs made by humans. It just made sense to give it a try.

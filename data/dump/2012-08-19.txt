@@ -1,2 +1,0 @@
-Huffington Magazine: 10 Lessons From the First 10 Issues under the category: TECH
- As we publish our 10th issue of Huffington magazine and in anticipation of our September 10th Design and Tech Meet Up in partnership with SPD, here's a snapshot of lessons learned developing and publishing a new digital-only magazine.
