@@ -1,4 +1,5 @@
-data/dump/*.txt
+data/*/*.txt
+nbs/storage/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
