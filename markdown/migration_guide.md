@@ -30,32 +30,18 @@ Why migrate from Pinecone to Qdrant?
 
 ## Planning your migration
 
-While this can be done in a single step, we recommended to do it in phases to ensure continuity of service. The following steps are recommended:
-
-Here is a sample migration plan:
-
-1. **Understanding Qdrant** (2 weeks): Spend a few hours getting familiar with Qdrant, its documentation, and its APIs. This includes understanding how to create collections, add points, and query collections
-
-2. **Planning the migration** (1 week): Create a detailed plan for the migration, including a data migration plan (how to move your vectors and metadata from Pinecone to Qdrant), a feature migration plan (how to ensure all features you're currently using in Pinecone are available and set up in Qdrant), and a rollback plan (in case there are unforeseen issues during the migration). The information in guide should help you do this a lot better.
-
-3. **Setting up a parallel Qdrant system** (1 week): Set up a Qdrant system running in parallel with your current Pinecone system. This would allow you to start testing Qdrant without affecting your existing Pinecone system.
-
-4. **Migrating data** (2-3 weeks): This involves transferring your vectors and metadata from Pinecone to Qdrant. The exact duration will depend on the amount of data to be transferred and the rate limitations of Pinecone APIs.
-
-5. **Testing and Switching Over** (2 weeks): Once the data has been migrated, you'll need to thoroughly test the Qdrant system to ensure it's working as expected. Once testing is complete and you're confident in the Qdrant system, you can switch over from Pinecone to Qdrant.
-
-6. **Monitoring and optimizing** (ongoing): After the switch, you'll want to closely monitor the Qdrant system to ensure it's performing well and optimize as needed.
-
-Please note that these are rough estimates and the actual timeline may vary based on the specific details of your setup and the complexity of the migration.
-
 ### Assess your current Pinecone environment
+
+### Evaluating Current Pinecone Setup
+
+### Mapping Data Structures Between Pinecone and Qdrant
 
 ## Initial Configuration
 
 Firstly, you will need to install some clients for Pinecone and Qdrant. In this guide, I assume that to be Python:
 
 ```bash
-pip install pinecone-io
+pip install pinecone-client
 pip install qdrant-client
 ```
 
@@ -87,22 +73,26 @@ import os
 import pinecone
 import numpy as np
 
-# Instantiate the Pinecone client
-pinecone.init(api_key=os.environ["PINECONE_API_KEY"])
-
-# Create a new index
-index_name = "example-index"
-pinecone.deindex(index_name)  # Ensure the index is not already present
-pinecone.create_index(index_name)
-
-# Instantiate an Index object for interacting with the specific index
-index = pinecone.Index(index_name=index_name)
-
 # Generate some example vectors
-num_vectors = 1000  # This should not exceed 1000 due to Pinecone's limit
+num_vectors = 100  # This should not exceed 100 due to Pinecone's limit
 vector_dimension = 300
 ids = [str(i) for i in range(num_vectors)]
 vectors = np.random.rand(num_vectors, vector_dimension)
+
+# Instantiate the Pinecone client
+pinecone.init(
+    api_key=os.environ["PINECONE_API_KEY"],
+    environment=os.environ["PINECONE_ENVIRONMENT"],
+)
+
+# Create a new index
+index_name = "example-index"
+if index_name in pinecone.list_indexes():
+    pinecone.delete_index(index_name)  # Ensure the index is not already present
+pinecone.create_index(index_name, dimension=vector_dimension, metric="cosine")
+
+# Instantiate an Index object for interacting with the specific index
+index = pinecone.Index(index_name=index_name)
 
 # Upsert vectors
 index.upsert(ids=ids, vectors=vectors)
@@ -115,10 +105,7 @@ for id, vector in zip(ids, fetched_vectors.values):
     print(f"ID: {id}, Vector: {vector}")
 
 # Remember to delete the index once you're done with it
-pinecone.deindex(index_name)
-
-# Deinitialize the Pinecone client
-pinecone.deinit()
+pinecone.delete_index(index_name)
 ```
 
 Please replace "PINECONE_API_KEY" with your actual Pinecone API key. This script creates an index, upserts 1000 vectors (the maximum allowed by Pinecone in a single request), then fetches those vectors.
