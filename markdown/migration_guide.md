@@ -73,22 +73,26 @@ import os
 import pinecone
 import numpy as np
 
-# Instantiate the Pinecone client
-pinecone.init(api_key=os.environ["PINECONE_API_KEY"])
-
-# Create a new index
-index_name = "example-index"
-pinecone.deindex(index_name)  # Ensure the index is not already present
-pinecone.create_index(index_name)
-
-# Instantiate an Index object for interacting with the specific index
-index = pinecone.Index(index_name=index_name)
-
 # Generate some example vectors
-num_vectors = 1000  # This should not exceed 1000 due to Pinecone's limit
+num_vectors = 100  # This should not exceed 100 due to Pinecone's limit
 vector_dimension = 300
 ids = [str(i) for i in range(num_vectors)]
 vectors = np.random.rand(num_vectors, vector_dimension)
+
+# Instantiate the Pinecone client
+pinecone.init(
+    api_key=os.environ["PINECONE_API_KEY"],
+    environment=os.environ["PINECONE_ENVIRONMENT"],
+)
+
+# Create a new index
+index_name = "example-index"
+if index_name in pinecone.list_indexes():
+    pinecone.delete_index(index_name)  # Ensure the index is not already present
+pinecone.create_index(index_name, dimension=vector_dimension, metric="cosine")
+
+# Instantiate an Index object for interacting with the specific index
+index = pinecone.Index(index_name=index_name)
 
 # Upsert vectors
 index.upsert(ids=ids, vectors=vectors)
@@ -101,10 +105,7 @@ for id, vector in zip(ids, fetched_vectors.values):
     print(f"ID: {id}, Vector: {vector}")
 
 # Remember to delete the index once you're done with it
-pinecone.deindex(index_name)
-
-# Deinitialize the Pinecone client
-pinecone.deinit()
+pinecone.delete_index(index_name)
 ```
 
 Please replace "PINECONE_API_KEY" with your actual Pinecone API key. This script creates an index, upserts 1000 vectors (the maximum allowed by Pinecone in a single request), then fetches those vectors.
