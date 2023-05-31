@@ -244,7 +244,7 @@ Please note that when tuning for performance, you must consider your specific us
 
 ## Pinecone
 
-Here are some tips for getting the best performance out of Pinecone[28](https://www.pinecone.io/docs/).
+Here are some tips for getting the best performance out of [Pinecone](https://www.pinecone.io/docs/).
 
 ### Security Considerations
 
