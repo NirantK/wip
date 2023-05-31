@@ -73,26 +73,22 @@ import os
 import pinecone
 import numpy as np
 
-# Generate some example vectors
-num_vectors = 100  # This should not exceed 100 due to Pinecone's limit
-vector_dimension = 300
-ids = [str(i) for i in range(num_vectors)]
-vectors = np.random.rand(num_vectors, vector_dimension)
-
 # Instantiate the Pinecone client
-pinecone.init(
-    api_key=os.environ["PINECONE_API_KEY"],
-    environment=os.environ["PINECONE_ENVIRONMENT"],
-)
+pinecone.init(api_key=os.environ["PINECONE_API_KEY"])
 
 # Create a new index
 index_name = "example-index"
-if index_name in pinecone.list_indexes():
-    pinecone.delete_index(index_name)  # Ensure the index is not already present
-pinecone.create_index(index_name, dimension=vector_dimension, metric="cosine")
+pinecone.deindex(index_name)  # Ensure the index is not already present
+pinecone.create_index(index_name)
 
 # Instantiate an Index object for interacting with the specific index
 index = pinecone.Index(index_name=index_name)
+
+# Generate some example vectors
+num_vectors = 1000  # This should not exceed 1000 due to Pinecone's limit
+vector_dimension = 300
+ids = [str(i) for i in range(num_vectors)]
+vectors = np.random.rand(num_vectors, vector_dimension)
 
 # Upsert vectors
 index.upsert(ids=ids, vectors=vectors)
@@ -105,7 +101,10 @@ for id, vector in zip(ids, fetched_vectors.values):
     print(f"ID: {id}, Vector: {vector}")
 
 # Remember to delete the index once you're done with it
-pinecone.delete_index(index_name)
+pinecone.deindex(index_name)
+
+# Deinitialize the Pinecone client
+pinecone.deinit()
 ```
 
 Please replace "PINECONE_API_KEY" with your actual Pinecone API key. This script creates an index, upserts 1000 vectors (the maximum allowed by Pinecone in a single request), then fetches those vectors.
@@ -245,20 +244,34 @@ Please note that when tuning for performance, you must consider your specific us
 
 ## Pinecone
 
-Here are some tips for getting the best performance out of Pinecone[28](https://www.pinecone.io/docs/).
+Here are some tips for getting the best performance out of [Pinecone](https://www.pinecone.io/docs/).
 
-### Security Considerations
+## Security Considerations
 
-**API Key Management**: If you're using Qdrant Cloud, it also uses API keys for authentication. Ensure these keys are securely managed.
+### Qdrant
 
-**Data Security**: Test for data security in Qdrant by verifying that the data is not accessible without proper authentication.
+Qdrant takes a unique approach to security that is minimalist yet flexible, allowing for robust security configurations tailored to each unique deployment environment:
 
-**Data Isolation**: In multi-tenant environments, ensure that data from one tenant is not accessible to another.
+1. **Environment-level Security**: Qdrant is designed to be deployed in secure environments, such as Kubernetes with Network Policies or a Virtual Private Cloud (VPC). This approach puts the control of security aspects in the hands of the deployer, allowing for custom security measures tailored to the specific needs of the deployment environment. If you're using Qdrant Cloud, it also uses API keys for authentication. Ensure these keys are securely managed.
 
-## Troubleshooting common migration issues
+2. **Data Encryption**: While Qdrant does not support built-in data encryption, it leaves the choice of encryption strategy to the underlying storage service. This allows for a wide variety of encryption methods to be employed depending on the specific storage solution used, providing greater flexibility.
 
-### How to troubleshoot migration issues
+3. **Authentication**: Qdrant's can be easily integrated with any existing authentication system at the service level, such as a reverse proxy. This allows for seamless integration with existing infrastructure without the need for modifications to accommodate a built-in authentication system.
 
-## [Optional] Rollout and Backup Strategy
+4. **Network Security**: Qdrant leaves network security to be handled at the environment level. This approach allows for a wide range of network security configurations to be employed depending on the specific needs of the deployment environment.
 
-### Phased Rollout Plan
+5. **Reporting Security Issues**: Qdrant encourages the reporting of any security-related issues to their dedicated security email, demonstrating their commitment to ongoing security improvements.
+
+### Pinecone
+
+1. **Authentication**: Pinecone requires a valid API key and environment pair for accessing its services, which can be a limiting factor if integration with an existing authentication system is desired.
+
+2. **Data and Network Safeguards**: Pinecone runs on a fully managed and secure AWS infrastructure, which may not provide the flexibility required for some deployment scenarios.
+
+3. **Compliance and Certifications**: While Pinecone's SOC2 Type II certification and GDPR-readiness are reassuring, they may not be sufficient for some organizations who want to work strictly within their VPC. This means deploying an on-premise of Pinecone under enterprise offering, which can be prohibitively expensive for some organizations.ß
+
+4. **Security Policies and Practices**: Pinecone's rigorous security policies may not align with the security practices of all organizations. This also moves the burden of finding the difference between the security policies and ironing them out to the end user.
+
+5. **Incident Management and Monitoring**: Pinecone's incident management and monitoring practices are not integrated with the organisation's existing incident management and monitoring systems, potentially complicating incident response.
+
+In conclusion, Qdrant's minimalist approach to security allows for greater flexibility and customization according to the specific needs of the deployment environment. It puts the control of security measures in the hands of the deployer, allowing for robust, tailored security configurations. On the other hand, Pinecone's built-in security measures and compliance certifications provide a comprehensive, ready-to-use security solution that may not provide the same level of customization as Qdrant. The choice between the two depends largely on the specific security needs of your application and the flexibility of your deployment environment.
