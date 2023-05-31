@@ -50,10 +50,6 @@ Please note that these are rough estimates and the actual timeline may vary base
 
 ### Assess your current Pinecone environment
 
-### Evaluating Current Pinecone Setup
-
-### Mapping Data Structures Between Pinecone and Qdrant
-
 ## Initial Configuration
 
 Firstly, you will need to install some clients for Pinecone and Qdrant. In this guide, I assume that to be Python:
