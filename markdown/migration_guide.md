@@ -30,6 +30,24 @@ Why migrate from Pinecone to Qdrant?
 
 ## Planning your migration
 
+While this can be done in a single step, we recommended to do it in phases to ensure continuity of service. The following steps are recommended:
+
+Here is a sample migration plan:
+
+1. **Understanding Qdrant** (2 weeks): Spend a few hours getting familiar with Qdrant, its documentation, and its APIs. This includes understanding how to create collections, add points, and query collections
+
+2. **Planning the migration** (1 week): Create a detailed plan for the migration, including a data migration plan (how to move your vectors and metadata from Pinecone to Qdrant), a feature migration plan (how to ensure all features you're currently using in Pinecone are available and set up in Qdrant), and a rollback plan (in case there are unforeseen issues during the migration). The information in guide should help you do this a lot better.
+
+3. **Setting up a parallel Qdrant system** (1 week): Set up a Qdrant system running in parallel with your current Pinecone system. This would allow you to start testing Qdrant without affecting your existing Pinecone system.
+
+4. **Migrating data** (2-3 weeks): This involves transferring your vectors and metadata from Pinecone to Qdrant. The exact duration will depend on the amount of data to be transferred and the rate limitations of Pinecone APIs.
+
+5. **Testing and Switching Over** (2 weeks): Once the data has been migrated, you'll need to thoroughly test the Qdrant system to ensure it's working as expected. Once testing is complete and you're confident in the Qdrant system, you can switch over from Pinecone to Qdrant.
+
+6. **Monitoring and optimizing** (ongoing): After the switch, you'll want to closely monitor the Qdrant system to ensure it's performing well and optimize as needed.
+
+Please note that these are rough estimates and the actual timeline may vary based on the specific details of your setup and the complexity of the migration.
+
 ### Assess your current Pinecone environment
 
 ### Evaluating Current Pinecone Setup
