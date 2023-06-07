@@ -69,15 +69,15 @@ client.recreate_collection(
 
 When migrating from Pinecone to Qdrant, the data transfer process will involve exporting data from Pinecone and importing that data into Qdrant.
 
-### Extracting Data from Pinecone – Pinecone Export Limitations
+### Navigating Pinecone Export Restrictions
 
-When extracting data from Pinecone, it is important to be aware of certain limitations:
+Data extraction from Pinecone must adhere to certain restrictions:
 
-1. **Queries**: The maximum value for `top_k`, the number of results to return, is 10,000. However, if the `include_metadata=True` or `include_data=True` is used, the maximum value for `top_k` is 1,000
+1. **Queries**: For the parameter `top_k`, denoting the number of results to return, the maximum value is 10,000. However, if the options `include_metadata=True` or `include_data=True` are utilized, the `top_k` value reduces to a maximum of 1,000.
 
-2. **Fetch and Delete**: The maximum number of vectors per fetch or delete request is 1,000.
+2. **Fetch and Delete**: The ceiling for the number of vectors per fetch or delete request is 1,000.
 
-3. **Metadata**: The maximum metadata size per vector is 40 KB. Null metadata values are not supported, and metadata with high cardinality can cause the pods to become full
+3. **Metadata**: The upper limit for metadata size per vector is 40 KB. Pinecone does not support null metadata values, and metadata exhibiting high cardinality may cause the pods to reach capacity.
 
 ### Importing Data into Qdrant
 
