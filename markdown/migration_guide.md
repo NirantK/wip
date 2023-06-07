@@ -67,7 +67,7 @@ client.recreate_collection(
 )
 ```
 
-When migrating from Pinecone to Qdrant, the data transfer process will involve exporting data from Pinecone and importing that data into Qdrant.
+The migration from Pinecone to Qdrant involves a two-step process of exporting data from Pinecone and subsequently importing that data into Qdrant.
 
 ### Navigating Pinecone Export Restrictions
 
