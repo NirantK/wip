@@ -79,27 +79,27 @@ Data extraction from Pinecone must adhere to certain restrictions:
 
 3. **Metadata**: The upper limit for metadata size per vector is 40 KB. Pinecone does not support null metadata values, and metadata exhibiting high cardinality may cause the pods to reach capacity.
 
-### Importing Data into Qdrant
+### Onboarding Data into Qdrant
 
-Qdrant requires the data in float format. The data can be imported into Qdrant by creating a collection and then indexing the data. This process involves the following steps:
+In Qdrant, data is expected in float format. The process of importing data into Qdrant involves the creation of a collection and then indexing the data, described in the steps below:
 
-1. **Creating a Collection**: A collection in Qdrant is a named set of points (vectors with a payload) among which you can search. Vectors within the same collection must have the same dimensionality and be compared by a single metric.
+1. **Creating a Collection**: In Qdrant, a collection is a named set of points (vectors with a payload) among which you can search. All vectors within a collection should share the same dimensionality and be comparable by a single metric.
 
-> You can create a collection by sending a PUT request to `/collections/{collection_name}` with the necessary parameters including the name of the collection and the vectors' size and distance.
+> You can instantiate a collection by sending a PUT request to `/collections/{collection_name}`, furnished with necessary parameters including the collection name and the dimensions of vectors.
 
-2. **Indexing Data**: Data can be indexed into the created collection. An example approach is to implement a class, such as `SearchClient`, with methods for data conversion to necessary formats, indexing, and searching. The `index` method in this class would prepare the data in the required format and then use the `upsert` function of the Qdrant client to index the data .
-   Test your applications with the migrated data
-   For both Pinecone and Qdrant, you can test your applications with the migrated data by interacting with their respective Python client libraries.
+2. **Indexing Data**: Once the collection is established, data can be indexed into it. This process can be streamlined by implementing a class like `SearchClient`, that encompasses methods for data conversion, indexing, and searching. The `index` method within this class should prepare data in the required format and employ the Qdrant client's `upsert` function to index the data.
 
-## Testing your applications with the migrated data
+## Testing your applications post-migration
 
-For Qdrant, you can test your applications by:
+Post-migration, it is important to validate your applications with both Pinecone and Qdrant.
 
-1. **Creating a Collection**: This is done by the recreate_collection method, which creates a collection with specified parameters like vector size and distance metric​3​.
+For Qdrant, the following actions can help test your applications:
 
-2. **Inserting Vectors**: Use the upsert method to insert vectors into your collection. The vectors can be inserted with associated metadata, known as payload in Qdrant terminology​​.
+1. **Creating a Collection**: This can be achieved using the `recreate_collection` method, which sets up a collection with specified parameters such as vector size and distance metric.
 
-3. **Querying Vectors**: Use the search method to find similar vectors within the collection. Qdrant also allows for more complex queries with filters based on vector payloads​​.
+2. **Inserting Vectors**: Vectors can be inserted into your collection using the `upsert` method. Along with the vectors, you can also add associated metadata, referred to as payload in Qdrant.
+
+3. **Querying Vectors**: The `search` method can be used to find similar vectors within the collection. Qdrant also supports advanced queries
 
 Remember, these are ideas that you can start with. Your actual testing scope may be larger based on the specifics of your application.
 
